@@ -1,37 +1,37 @@
 <template>
-  <div
-    class="app" 
-    id="hej"
-  >
-    <button @click="openCalendar">
-      Calendar
-    </button>
-    <calendar />
+  <div class="app">
+    <button @click="toggleModal">Calendar</button>
+    <Modal :isOpen="modalOpen" @closeModal="toggleModal" />
   </div>
 </template>
 
 <script>
-import Calendar from "./components/Calendar.vue";
-
+import Modal from './components/Modal.vue';
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Calendar,
+    Modal,
   },
   data() {
     return {
-      calendarVisible: false,
+      modalOpen: false,
     };
   },
   methods: {
-    openCalendar() {
-      this.calendarVisible = true;
+    toggleModal() {
+      this.modalOpen = !this.modalOpen;
     },
   },
 };
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@600&display=swap');
+
+* {
+  font-family: 'Raleway', sans-serif;
+  display: border-box;
+}
 .app {
   display: flex;
   justify-content: center;

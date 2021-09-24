@@ -1,8 +1,10 @@
 module.exports = {
   extends: [
-    "plugin:vue/strongly-recommended",
+    'plugin:vue/recommended',
+    'plugin:prettier-vue/recommended',
+    'prettier',
   ],
   rules: {
-    "vue/attribute-hyphenation": "off"
-  }
-}
+    'vue/attribute-hyphenation': 'off',
+  },
+};
