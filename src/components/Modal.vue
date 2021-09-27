@@ -2,11 +2,16 @@
   <div>
     <div class="modal" :class="{ active: true }">
       <div class="modal-body">
-        <div class="left-container">
+        <div class="left-col">
           <VerticalTab />
         </div>
-        <div class="mid-container">
+        <div class="mid-col">
+          <CalenderFilter />
           <Calendar />
+        </div>
+        <div class="right-col">
+          <QuickChoices />
+          <div class="filterButtonContainer"><Button title="Filtrera" /></div>
         </div>
         <button class="close-button" @click="closeModal">&times;</button>
       </div>
@@ -18,12 +23,18 @@
 <script>
 import Calendar from './Calendar.vue';
 import VerticalTab from './VerticalTab.vue';
+import CalenderFilter from './CalenderFilter.vue';
+import QuickChoices from './QuickChoices.vue';
+import Button from './Button.vue';
 
 export default {
   name: 'Modal',
   components: {
     Calendar,
     VerticalTab,
+    CalenderFilter,
+    QuickChoices,
+    Button,
   },
   props: {
     isOpen: {
@@ -47,7 +58,7 @@ export default {
   transform: translate(-50%, -50%) scale(0);
   transition: 200ms ease-in-out;
   border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 2px;
   z-index: 10;
   background-color: white;
   width: 800px;
@@ -61,28 +72,45 @@ export default {
 }
 
 .close-button {
-  justify-self: end;
-  align-self: start;
+  text-align: center;
+  position: absolute;
+  right: 0;
+  top: 0;
   cursor: pointer;
   border: none;
   outline: none;
   background: none;
   font-size: 1.25rem;
-  font-weight: bold;
+  color: #fff;
+  background-color: #16191c;
 }
 
 .modal-body {
   display: flex;
+  position: relative;
+  height: 100%;
+}
+.left-col {
+  width: 15%;
   height: 100%;
 }
 
-.mid-container {
-  width: 70%;
+.mid-col {
+  width: 50%;
+  margin-top: 20px;
+  margin-left: 20px;
 }
 
-.left-container {
-  width: 16%;
-  height: 100%;
+.right-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 35%;
+  margin: 20px;
+}
+
+.filterButtonContainer {
+  align-self: flex-end;
 }
 
 #overlay {

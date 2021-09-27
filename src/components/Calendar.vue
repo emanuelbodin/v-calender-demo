@@ -89,7 +89,5 @@ export default {
 
 <style scoped>
 .container {
-  padding: 10px 15px;
-  margin: 10px;
 }
 </style>
