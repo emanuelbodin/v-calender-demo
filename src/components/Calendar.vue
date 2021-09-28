@@ -1,13 +1,12 @@
 <template>
   <div class="container">
     <v-calendar
+      ref="calendar"
       :is-expanded="true"
       show-weeknumbers
       :attributes="attributes"
-      :theme="themeStyles"
       @dayclick="onDayClick"
     >
-      >
       <span slot="header-title" />
       <span slot="header-left-button" />
       <span slot="header-right-button" />
@@ -17,17 +16,23 @@
 
 <script>
 export default {
-  data() {
-    return {
-      start: new Date(),
-      end: null,
-      themeStyles: {
-        contanier: {
-          background: 'linear-gradient(to bottom right, #ff5050, #ff66b3)',
-          color: '#fafafa',
-        },
-      },
-    };
+  props: {
+    start: {
+      validator: (value) => typeof value === 'object' || value == null,
+      required: true,
+    },
+    end: {
+      validator: (value) => typeof value === 'object' || value == null,
+      required: true,
+    },
+    selectedMonth: {
+      type: Number,
+      required: true,
+    },
+    selectedYear: {
+      type: Number,
+      required: true,
+    },
   },
   computed: {
     attributes() {
@@ -69,19 +74,27 @@ export default {
       ];
     },
   },
+  watch: {
+    async selectedMonth() {
+      await this.$refs.calendar.move({ month: this.selectedMonth, year: 2021 });
+    },
+  },
   methods: {
     onDayClick(day) {
       const date = new Date(day.id);
+      let end;
+      let start;
       if (this.end != null) {
-        this.start = date;
-        this.end = null;
-        return;
+        start = date;
+        end = null;
       } else if (date < this.start) {
-        this.end = this.start;
-        this.start = date;
-        return;
+        end = this.start;
+        start = date;
+      } else {
+        end = date;
+        start = this.start;
       }
-      this.end = date;
+      this.$emit('dateChange', start, end);
     },
   },
 };

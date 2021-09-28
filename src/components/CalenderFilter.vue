@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tabContainer">
-      <Tabs :tabOptions="tabOptions" @changeTab="changeTimeSetting" />
+      <Tabs :tabOptions="tabOptions" @changeTab="changeTab" />
     </div>
     <div class="checkbox-row">
       <div
@@ -9,8 +9,13 @@
         :key="item.id"
         class="checkbox-container"
       >
-        <Checkbox :id="item.id" :checked="item.checked" />
-        <p class="checkbox-title">{{ item.title }}</p>
+        <div class="center">
+          <Checkbox :id="item.id" :checked="item.checked" />
+        </div>
+        <div>
+          <div class="checkbox-title">{{ item.title }}</div>
+          <div class="checkboxSubtitle">{{ item.subtitle }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -25,25 +30,22 @@ export default {
     Tabs,
     Checkbox,
   },
+  props: {
+    tabOptions: {
+      type: Array,
+      required: true,
+    },
+    checkboxOptions: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
-    return {
-      tabOptions: [
-        { title: 'Månad', value: 'MONTH', active: true },
-        { title: 'År', value: 'YEAR', active: false },
-      ],
-      checkboxOptions: [
-        { id: 'workDays', checked: true, title: 'Endast Arbetsdagar Mån-Fre' },
-        { id: 'workTime', checked: true, title: 'Endast Arbetstid 8:00-17:00' },
-      ],
-    };
+    return {};
   },
   methods: {
-    changeTimeSetting(value) {
-      this.tabOptions.map((el) => {
-        if (el.value === value) el.active = true;
-        else el.active = false;
-        return el;
-      });
+    changeTab(value) {
+      this.$emit('changeTab', value);
     },
   },
 };
@@ -64,11 +66,21 @@ export default {
   display: flex;
 }
 
+.center {
+  align-self: flex-start;
+}
+
 .checkbox-title {
-  align-self: center;
-  margin-left: 3px;
+  margin-left: 5px;
   font-family: Raleway;
   font-size: 15px;
+  color: #6a6a6a;
+}
+
+.checkboxSubtitle {
+  margin-left: 5px;
+  font-family: Raleway;
+  font-size: 14px;
   color: #6a6a6a;
 }
 </style>

@@ -3,14 +3,33 @@
     <div class="modal" :class="{ active: true }">
       <div class="modal-body">
         <div class="left-col">
-          <VerticalTab />
+          <VerticalTab
+            :timeSetting="timeSetting"
+            :selectedMonth="selectedMonth"
+            @timeChange="onTimeChange"
+          />
         </div>
         <div class="mid-col">
-          <CalenderFilter />
-          <Calendar />
+          <CalenderFilter
+            :tabOptions="tabOptions"
+            :checkboxOptions="checkboxOptions"
+            @changeTab="changeTimeSetting"
+          />
+          <Calendar
+            v-if="timeSetting === 'MONTH'"
+            :selectedMonth="selectedMonth"
+            :selectedYear="selectedYear"
+            :start="startDate"
+            :end="endDate"
+            @dateChange="onDateChange"
+          />
+          <MonthGrid v-else />
         </div>
         <div class="right-col">
-          <QuickChoices />
+          <QuickChoices
+            :shouldClear="triggerClearQuickChoices"
+            @select="onDateChange"
+          />
           <div class="filterButtonContainer"><Button title="Filtrera" /></div>
         </div>
         <button class="close-button" @click="closeModal">&times;</button>
@@ -26,6 +45,7 @@ import VerticalTab from './VerticalTab.vue';
 import CalenderFilter from './CalenderFilter.vue';
 import QuickChoices from './QuickChoices.vue';
 import Button from './Button.vue';
+import MonthGrid from './MonthGrid.vue';
 
 export default {
   name: 'Modal',
@@ -35,6 +55,7 @@ export default {
     CalenderFilter,
     QuickChoices,
     Button,
+    MonthGrid,
   },
   props: {
     isOpen: {
@@ -42,9 +63,57 @@ export default {
       deafult: false,
     },
   },
+  data() {
+    return {
+      triggerClearQuickChoices: false,
+      startDate: new Date(),
+      endDate: null,
+      selectedMonth: new Date().getMonth() + 1,
+      selectedYear: new Date().getFullYear(),
+      timeSetting: 'MONTH',
+      tabOptions: [
+        { title: 'Månad', value: 'MONTH', active: true },
+        { title: 'År', value: 'YEAR', active: false },
+      ],
+      checkboxOptions: [
+        {
+          id: 'workDays',
+          checked: true,
+          title: 'Endast Arbetsdagar',
+          subtitle: 'Mån-Fre',
+        },
+        {
+          id: 'workTime',
+          checked: true,
+          title: 'Endast Arbetstid',
+          subtitle: '8:00-17:00',
+        },
+      ],
+    };
+  },
   methods: {
     closeModal() {
       this.$emit('closeModal');
+    },
+    changeTimeSetting(value) {
+      this.tabOptions.map((el) => {
+        if (el.value === value) el.active = true;
+        else el.active = false;
+        return el;
+      });
+      this.timeSetting = value;
+    },
+    onTimeChange(type, id) {
+      if (type === 'MONTH') {
+        this.selectedMonth = parseInt(id);
+      } else this.selectedYear = parseInt(id);
+    },
+    onDateChange(start, end, shouldTriggerClear = true) {
+      this.startDate = start;
+      this.endDate = end;
+      this.selectedMonth = start.getMonth() + 1;
+      if (shouldTriggerClear)
+        this.triggerClearQuickChoices = !this.triggerClearQuickChoices;
     },
   },
 };

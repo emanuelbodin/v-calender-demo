@@ -68,7 +68,7 @@ export default {
   position: relative;
   transition: background-color 0.4s;
   cursor: pointer;
-  border: 1px solid #090e2e;
+  border: 1px solid #6a6a6a;
 }
 
 .checkbox .checkmark:after {
@@ -91,6 +91,6 @@ export default {
 }
 
 .checkbox input:checked ~ .checkmark {
-  background-color: #090e2e;
+  background-color: #6a6a6a;
 }
 </style>

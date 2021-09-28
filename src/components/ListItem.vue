@@ -49,6 +49,9 @@ export default {
   margin-top: 2px;
   cursor: pointer;
 }
+.list-item:hover {
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+}
 
 .selected {
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
