@@ -4,8 +4,10 @@
       v-for="month in monthList"
       :key="month.id"
       class="item"
-      :class="{ selected: month.selected }"
+      :class="{ selected: month.selected, hovered: month.hovered }"
       @click="onSelect(month.id)"
+      @mouseover="onHover(month.id)"
+      @mouseleave="onHoverLeave()"
     >
       {{ month.label }}
     </div>
@@ -19,74 +21,125 @@ export default {
   props: {},
   data() {
     return {
+      start: null,
+      end: null,
       monthList: [
         {
-          id: 'jan',
+          id: 0,
           label: 'Jan',
           selected: false,
+          hovered: false,
         },
         {
-          id: 'feb',
+          id: 1,
           label: 'Feb',
           selected: false,
+          hovered: false,
         },
         {
-          id: 'mar',
+          id: 2,
           label: 'Mar',
           selected: false,
+          hovered: false,
         },
         {
-          id: 'apr',
+          id: 3,
           label: 'Apr',
           selected: false,
+          hovered: false,
         },
         {
-          id: 'maj',
+          id: 4,
           label: 'Maj',
           selected: false,
+          hovered: false,
         },
         {
-          id: 'jun',
+          id: 5,
           label: 'Jun',
           selected: false,
+          hovered: false,
         },
         {
-          id: 'jul',
+          id: 6,
           label: 'Jul',
           selected: false,
+          hovered: false,
         },
         {
-          id: 'aug',
+          id: 7,
           label: 'Aug',
           selected: false,
+          hovered: false,
         },
         {
-          id: 'sep',
+          id: 8,
           label: 'Sep',
           selected: false,
+          hovered: false,
         },
         {
-          id: 'okt',
+          id: 9,
           label: 'Okt',
           selected: false,
+          hovered: false,
         },
         {
-          id: 'nov',
+          id: 10,
           label: 'Nov',
           selected: false,
+          hovered: false,
         },
         {
-          id: 'dec',
+          id: 11,
           label: 'Dec',
           selected: false,
+          hovered: false,
         },
       ],
     };
   },
   methods: {
     onSelect(id) {
+      if (this.start != null && this.end != null) {
+        this.start = null;
+        this.end = null;
+        this.monthList = this.monthList.map((el) => {
+          el.selected = false;
+          return el;
+        });
+      } else if (this.start == null) {
+        this.start = id;
+        this.monthList = this.monthList.map((el) => {
+          if (el.id === this.start) el.selected = true;
+          return el;
+        });
+      } else {
+        this.end = id;
+        const startIndex = this.monthList.findIndex(
+          (el) => el.id === this.start
+        );
+        const endIndex = this.monthList.findIndex((el) => el.id === this.end);
+        this.monthList = this.monthList.map((el, index) => {
+          if (index >= startIndex && index <= endIndex) el.selected = true;
+          return el;
+        });
+        this.$emit('monthChange');
+      }
+    },
+    onHover(id) {
+      if (this.start == null || (this.start != null && this.end != null))
+        return;
+      const startIndex = this.monthList.findIndex((el) => el.id === this.start);
+      const foundIndex = this.monthList.findIndex((el) => el.id === id);
+      this.monthList = this.monthList.map((el, index) => {
+        if (index >= startIndex && index <= foundIndex) el.hovered = true;
+        return el;
+      });
+    },
+    onHoverLeave() {
       this.monthList = this.monthList.map((el) => {
-        if (el.id === id) el.selected = !el.selected;
+        el.hovered = false;
         return el;
       });
     },
@@ -110,7 +163,8 @@ export default {
 }
 
 .selected,
-.item:hover {
+.item:hover,
+.hovered {
   color: white;
   background-color: #6a6a6a;
 }

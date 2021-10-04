@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="modal" :class="{ active: true }">
+    <div class="modal" :class="{ active: isOpen }">
       <div class="modal-body">
         <div class="left-col">
           <VerticalTab
@@ -35,7 +35,7 @@
         <button class="close-button" @click="closeModal">&times;</button>
       </div>
     </div>
-    <div id="overlay" :class="{ active: true }" @click="closeModal"></div>
+    <div id="overlay" :class="{ active: isOpen }" @click="closeModal"></div>
   </div>
 </template>
 
@@ -195,7 +195,7 @@ export default {
 }
 
 #overlay.active {
-  opacity: 1;
+  opacity: 1s;
   pointer-events: all;
 }
 </style>
